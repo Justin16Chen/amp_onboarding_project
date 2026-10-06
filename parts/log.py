@@ -1,25 +1,21 @@
 import datetime
 import csv
+
 class Logger():
     def __init__(self):
-        # Open and create a file object
-        pass
-        # Create a csv writer object
-        pass
+        self.file = open("logger.csv", "w", newline="")
+        self.writer = csv.writer(self.file)
 
-        # Create fields for CSV
-        pass
-        # Write fields to CSV
-        pass
+        self.writer.writerow(["timestamp", "object/x", "object/y", "contour/area"])
 
     def run(self, object_x, object_y, contour_area):
-        # Check that input parameters are not None
-        pass
-            # Get current timestamp
-            pass
-            # Create a row containing the parameters as a list
-            pass
-            # Write the row to the csv
-            pass
+        if object_x is None or object_y is None or contour_area is None:
+            return None
+
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S.%f")
+        row = [timestamp, object_x, object_y, contour_area]
+        self.writer.writerow(row)
+
+        
     
 

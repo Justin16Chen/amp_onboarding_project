@@ -1,33 +1,33 @@
 import cv2
 
 class Object_Detection():
-
     def run(self, image):
-        # Check if input image is not None
-        pass
-            # Convert to grayscale
-            pass
-            # Convert to binary - convert all pixels with values less than 127 to 0 and greater than 127 to 255
-            pass
+        if image == None:
+            return None
 
-            # Detect Contours
-            pass
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        success, mask = cv2.threshold(gray, 127, 255, cv2.THRES_BINARY)
+        contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-            # Find Largest Contour
-            pass
+        largest_contour = None
+        largest_moments = None
 
-            # Draw largest contour
-            pass
+        for c in contours:
+            moments = cv2.moments(c)
+            if largest_moments is None or moments['m00'] > largest_moments['m00']:
+                largest_moments = moments
+                largest_contour = c
+        if largest_moments is None:
+            return None
+    
+        cv2.drawContours(image, [largest_contour], 0, (0, 255, 0), 2)
+        centroid_x = -1
+        centroid_y = -1
+        if (largest_moments['m00'] > 1e-9):
+            centroid_x = largest_moments['m10'] / largest_moments['m00']
+            centroid_y = largest_moments['m01'] / largest_moments['m00']
+            cv2.circle(image, (centroid_x, centroid_y), 10, (0, 0, 255), -1)
 
-            # Find contour moments
-            pass
+        return image, centroid_x, centroid_y, largest_moments['m00']
 
-            # Calculate the centroid of the contour with moments
-            pass
-            
-            # Draw centroid
-            pass
-
-            # Return image, centroid_x, centroid_y, max_area
-            pass
             
